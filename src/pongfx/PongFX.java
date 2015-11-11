@@ -35,7 +35,7 @@ public class PongFX extends Application {
     
     //Direccion de la bola
     int dirXBall = 3; 
-    //int dirYBall = 2;
+    int dirYBall = 2;
             
     @Override
     public void start(Stage primaryStage) {
@@ -70,35 +70,47 @@ public class PongFX extends Application {
                 if(posX == -195){
                     dirXBall = +3;
                 }
-                /*double posY = ball.getTranslateY();
+                double posY = ball.getTranslateY();
                 ball.setTranslateY (posY + dirYBall);
                 System.out.println(posY);
-                if(posX == 125){
+                /*if(posY == 118){
                     dirYBall = -2;
                 }
-                if(posX == -125){
+                if(posY == -110){
                     dirYBall = +2;
                 }*/
+                if(posX <= 195 && posY == 118){
+                    dirXBall = 3;
+                    dirYBall = -2;
+                }
+                if(posX >= -195 && posY == -108){
+                    dirXBall = -3;
+                    dirYBall = 2;
+                }
+                
+                
+                
+                
                 double posYPlayer1 = barPlayer1.getTranslateY();
                 posYPlayer1 += gravityPlayer1;
                 barPlayer1.setTranslateY(posYPlayer1);
                 //System.out.println(posYPlayer1);
                 
                 if(posYPlayer1 == 100){
-                    gravityPlayer1 = -2;
+                    gravityPlayer1 = 0;
                 }
                 if(posYPlayer1 == -100){
-                    gravityPlayer1 = 2;
+                    gravityPlayer1 = 0;
                 }
                 double posYPlayer2 = barPlayer2.getTranslateY();
                 posYPlayer2 += gravityPlayer2;
                 barPlayer2.setTranslateY(posYPlayer2);
                 
                 if(posYPlayer2 == 100){
-                    gravityPlayer2 = -2;
+                    gravityPlayer2 = 0;
                 }
                 if(posYPlayer2 == -100){
-                    gravityPlayer2 = 2;
+                    gravityPlayer2 = 0;
                 }
             }
         }.start();
