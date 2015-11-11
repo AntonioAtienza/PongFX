@@ -7,7 +7,6 @@ package pongfx;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.beans.InvalidationListener;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -25,15 +24,18 @@ public class PongFX extends Application {
     
     final int WORLD_WIDTH = 400;
     final int WORLD_HEIGHT = 240;
-    //int posX
-    int barPosY = 90;
-    final int BAR_SPEED = 8;
     
+    //Datos sobre la barra
+    int barPosXPlayer1 = 390;
+    int barPosXPlayer2 = 5;
+    int barPosY = 100;
+    //final int BAR_SPEED = 8;
+    int gravityPlayer1 = 2;
+    int gravityPlayer2 = 2;
+    
+    //Direccion de la bola
     int dirXBall = 3; 
-    int dirYBall = 2;
-     
-
-    
+    //int dirYBall = 2;
             
     @Override
     public void start(Stage primaryStage) {
@@ -43,15 +45,17 @@ public class PongFX extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
         
-        Rectangle bar = new Rectangle(5, barPosY, 5, 40);
-        bar.setFill(Color.BLACK);
-        root.getChildren().add(bar);
+        Rectangle barPlayer1 = new Rectangle(barPosXPlayer1, barPosY, 5, 40);
+        barPlayer1.setFill(Color.BLACK);
+        root.getChildren().add(barPlayer1);
+        
+        Rectangle barPlayer2 = new Rectangle(barPosXPlayer2, barPosY, 5, 40);
+        barPlayer2.setFill(Color.BLACK);
+        root.getChildren().add(barPlayer2);
         
         Circle ball = new Circle(200, 115, 5);
         ball.setFill(Color.BROWN);
         root.getChildren().add(ball);
-        
-       
         
         new AnimationTimer() {
             @Override
@@ -75,6 +79,27 @@ public class PongFX extends Application {
                 if(posX == -125){
                     dirYBall = +2;
                 }*/
+                double posYPlayer1 = barPlayer1.getTranslateY();
+                posYPlayer1 += gravityPlayer1;
+                barPlayer1.setTranslateY(posYPlayer1);
+                //System.out.println(posYPlayer1);
+                
+                if(posYPlayer1 == 100){
+                    gravityPlayer1 = -2;
+                }
+                if(posYPlayer1 == -100){
+                    gravityPlayer1 = 2;
+                }
+                double posYPlayer2 = barPlayer2.getTranslateY();
+                posYPlayer2 += gravityPlayer2;
+                barPlayer2.setTranslateY(posYPlayer2);
+                
+                if(posYPlayer2 == 100){
+                    gravityPlayer2 = -2;
+                }
+                if(posYPlayer2 == -100){
+                    gravityPlayer2 = 2;
+                }
             }
         }.start();
         
@@ -83,23 +108,22 @@ public class PongFX extends Application {
             public void handle(KeyEvent event) {
                 switch (event.getCode()) {
                     case UP:
-                        bar.resizeRelocate(5, barPosY, 5, 40);
-                        barPosY -= BAR_SPEED;
+                        gravityPlayer1 = -2;
                     break;
                     case DOWN:
-                        bar.resizeRelocate(5, barPosY, 5, 40);
-                        barPosY += BAR_SPEED;
-                    
+                        gravityPlayer1 = 2;
+                    break;
+                    case W:
+                        gravityPlayer2 = -2;
+                    break;
+                    case S:
+                        gravityPlayer2 = 2;
                 }  
             }  
         });
         
-    }
-
-    
-                   
-    
-                    
+    }     
+         
     /**
      * @param args the command line arguments
      */
