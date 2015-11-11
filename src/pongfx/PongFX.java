@@ -89,8 +89,6 @@ public class PongFX extends Application {
                 }
                 
                 
-                
-                
                 double posYPlayer1 = barPlayer1.getTranslateY();
                 posYPlayer1 += gravityPlayer1;
                 barPlayer1.setTranslateY(posYPlayer1);
