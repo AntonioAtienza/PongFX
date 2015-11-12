@@ -39,7 +39,8 @@ public class PongFX extends Application {
     //Direccion de la bola
     int dirXBall = 3; 
     int dirYBall = 2;
-            
+    int posBall= 0;
+    int posBar2 = 0;
     @Override
     public void start(Stage primaryStage) {
         Group root = new Group();
@@ -107,6 +108,9 @@ public class PongFX extends Application {
                 if(posYPlayer2 >= WORLD_HEIGHT-BAR_HEIGHT){
                     gravityPlayer2 = 0;
                 }
+                /*if(posX == 390 && posYPlayer2 == 390){
+                    dirXBall = -3;
+                }*/
             }
         }.start();
         
@@ -125,7 +129,7 @@ public class PongFX extends Application {
                     break;
                     case DOWN:
                         gravityPlayer2 = 2;
-                }  
+                } 
             }  
         });
         
