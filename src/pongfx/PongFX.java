@@ -120,7 +120,7 @@ public class PongFX extends Application {
                 if(posYPlayer2 >= WORLD_HEIGHT - BAR_HEIGHT){
                     barPlayer2.setTranslateY(WORLD_HEIGHT - BAR_HEIGHT);
                 }
-                if(posXBall == posXPlayer2){
+                if(posXBall >= posXPlayer2){
                     if (posYBall >= posYPlayer2 && posYBall <= (posYPlayer2 + BAR_HEIGHT)){
                             dirXBall = -3;
                     }
