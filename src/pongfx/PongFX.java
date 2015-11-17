@@ -11,10 +11,12 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.OverrunStyle;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 /**
@@ -38,42 +40,47 @@ public class PongFX extends Application {
     int posBar2 = 0;
     int posXPlayer2 = WORLD_WIDTH - 15;
     int posXPlayer1 = 15;
+    int marcadorPlayer1 = 1;
+    int marcadorPlayer2 = 1;
     
     @Override
     public void start(Stage primaryStage) {
         Group root = new Group();
-        Scene scene = new Scene(root, WORLD_WIDTH, WORLD_HEIGHT, Color.AQUAMARINE);
+        Scene scene = new Scene(root, WORLD_WIDTH, WORLD_HEIGHT, Color.BLACK);
         primaryStage.setTitle("Pong FX");
         primaryStage.setScene(scene);
         primaryStage.show();
         
-        Rectangle barPlayer1 = new Rectangle(BAR_WIDTH, BAR_HEIGHT, Color.BLACK);
+        Rectangle barPlayer1 = new Rectangle(BAR_WIDTH, BAR_HEIGHT, Color.AQUA);
         barPlayer1.setTranslateX(5);
+        barPlayer1.setTranslateY(WORLD_HEIGHT*0.5 -BAR_HEIGHT*0.5);
         root.getChildren().add(barPlayer1);
         
-        Rectangle barPlayer2 = new Rectangle(BAR_WIDTH, BAR_HEIGHT, Color.BLACK);
+        Rectangle barPlayer2 = new Rectangle(BAR_WIDTH, BAR_HEIGHT, Color.AQUA);
         barPlayer2.setTranslateX(WORLD_WIDTH - 10);
+        barPlayer2.setTranslateY(WORLD_HEIGHT*0.5 -BAR_HEIGHT*0.5);
         root.getChildren().add(barPlayer2);
         
-        Rectangle line = new Rectangle(0.5,WORLD_HEIGHT, Color.BLACK);
+        Rectangle line = new Rectangle(0.5,WORLD_HEIGHT, Color.WHITE);
         line.setTranslateX(WORLD_WIDTH*0.5);
         root.getChildren().add(line);
         
         Label marcador1 = new Label(String.valueOf(0));
         marcador1.setTranslateX(WORLD_WIDTH*0.35);
+        marcador1.setTextFill(Color.GOLD);
+        marcador1.setFont(Font.font(20));
         root.getChildren().add(marcador1);
         
         Label marcador2 = new Label(String.valueOf(0));
         marcador2.setTranslateX(WORLD_WIDTH*0.65 - 10);
+        marcador2.setTextFill(Color.GOLD);
+        marcador2.setFont(Font.font(20));
         root.getChildren().add(marcador2);
         
-        Circle ball = new Circle(RADIO_BALL,Color.BROWN);
+        Circle ball = new Circle(RADIO_BALL,Color.ORANGE);
         ball.setTranslateX (WORLD_WIDTH*0.5);
         ball.setTranslateY(WORLD_HEIGHT*0.5);
         root.getChildren().add(ball);
-        
-        System.out.println(posXPlayer1);
-        
         
         new AnimationTimer() {
             @Override
@@ -94,7 +101,6 @@ public class PongFX extends Application {
                 //Movimiento de la bola en el eje de coordenadas Y
                 double posYBall = ball.getTranslateY();
                 //ball.setTranslateY (posYBall + dirYBall);
-                //System.out.println(posYBall);
                 if(posYBall == WORLD_HEIGHT - RADIO_BALL){
                     dirYBall = -2;
                 }
@@ -139,10 +145,13 @@ public class PongFX extends Application {
                 }
                 if (posXBall < -RADIO_BALL){
                     ball.setTranslateX(WORLD_WIDTH * 0.5);
-                    
+                    marcador2.setText(String.valueOf(marcadorPlayer1++));
                 }
                 if (posXBall > WORLD_WIDTH + RADIO_BALL){
                     ball.setTranslateX(WORLD_WIDTH * 0.5);
+                    
+                    marcador1.setText(String.valueOf(marcadorPlayer2++));
+                        
                 }
                 
             }
