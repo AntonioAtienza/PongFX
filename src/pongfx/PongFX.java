@@ -13,8 +13,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
-import static javafx.scene.paint.Color.BLACK;
-import static javafx.scene.paint.Color.BROWN;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -31,13 +29,15 @@ public class PongFX extends Application {
     int gravityPlayer1 = 2;
     int gravityPlayer2 = 2;
     final int BAR_HEIGHT = 50;
+    final int BAR_WIDTH = 5;
     final int RADIO_BALL = 5;
     //Direccion de la bola
     int dirXBall = 3; 
     int dirYBall = 2;
     int posBall= 0;
     int posBar2 = 0;
-    int posXPlayer2 = WORLD_WIDTH - 10;
+    int posXPlayer2 = WORLD_WIDTH - 15;
+    int posXPlayer1 = 15;
     
     @Override
     public void start(Stage primaryStage) {
@@ -47,20 +47,15 @@ public class PongFX extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
         
-        Rectangle barPlayer1 = new Rectangle(5, BAR_HEIGHT, BLACK);
+        Rectangle barPlayer1 = new Rectangle(BAR_WIDTH, BAR_HEIGHT, Color.BLACK);
         barPlayer1.setTranslateX(5);
         root.getChildren().add(barPlayer1);
         
-        Rectangle barPlayer2 = new Rectangle(5, BAR_HEIGHT, BLACK);
-        barPlayer2.setTranslateX(390);
+        Rectangle barPlayer2 = new Rectangle(BAR_WIDTH, BAR_HEIGHT, Color.BLACK);
+        barPlayer2.setTranslateX(WORLD_WIDTH - 10);
         root.getChildren().add(barPlayer2);
         
-        Circle ball = new Circle(RADIO_BALL,BROWN);
-        ball.setTranslateX (WORLD_WIDTH*0.5);
-        ball.setTranslateY(WORLD_HEIGHT*0.5);
-        root.getChildren().add(ball);
-        
-        Rectangle line = new Rectangle(0.5,WORLD_HEIGHT, BLACK);
+        Rectangle line = new Rectangle(0.5,WORLD_HEIGHT, Color.BLACK);
         line.setTranslateX(WORLD_WIDTH*0.5);
         root.getChildren().add(line);
         
@@ -72,23 +67,33 @@ public class PongFX extends Application {
         marcador2.setTranslateX(WORLD_WIDTH*0.65 - 10);
         root.getChildren().add(marcador2);
         
+        Circle ball = new Circle(RADIO_BALL,Color.BROWN);
+        ball.setTranslateX (WORLD_WIDTH*0.5);
+        ball.setTranslateY(WORLD_HEIGHT*0.5);
+        root.getChildren().add(ball);
+        
+        System.out.println(posXPlayer1);
+        
         
         new AnimationTimer() {
             @Override
             public void handle(long now) {
+                
                 //Movimiento de la bola en el eje X
                 double posXBall = ball.getTranslateX();
                 ball.setTranslateX(posXBall + dirXBall);
+                
                 //System.out.println(posXBall);
-                if(posXBall == WORLD_WIDTH - RADIO_BALL ){
-                    dirXBall = -3;
-                }
-                if(posXBall == RADIO_BALL){
+                /*if(posXBall == WORLD_WIDTH - RADIO_BALL ){
+                    dirXBall = -3;}*/
+                
+                /*if(posXBall == RADIO_BALL){
                     dirXBall = +3;
-                }
+                }*/
+                
                 //Movimiento de la bola en el eje de coordenadas Y
                 double posYBall = ball.getTranslateY();
-                ball.setTranslateY (posYBall + dirYBall);
+                //ball.setTranslateY (posYBall + dirYBall);
                 //System.out.println(posYBall);
                 if(posYBall == WORLD_HEIGHT - RADIO_BALL){
                     dirYBall = -2;
@@ -120,12 +125,26 @@ public class PongFX extends Application {
                 if(posYPlayer2 >= WORLD_HEIGHT - BAR_HEIGHT){
                     barPlayer2.setTranslateY(WORLD_HEIGHT - BAR_HEIGHT);
                 }
+                
+                //Rebote en la pala
                 if(posXBall >= posXPlayer2){
                     if (posYBall >= posYPlayer2 && posYBall <= (posYPlayer2 + BAR_HEIGHT)){
                             dirXBall = -3;
-                    }
-                         
+                    }   
                 }
+                if (posXBall <= posXPlayer1){
+                    if (posYBall >= posYPlayer1 && posYBall <= (posYPlayer1 + BAR_HEIGHT)){
+                            dirXBall = 3;
+                    }
+                }
+                if (posXBall < -RADIO_BALL){
+                    ball.setTranslateX(WORLD_WIDTH * 0.5);
+                    
+                }
+                if (posXBall > WORLD_WIDTH + RADIO_BALL){
+                    ball.setTranslateX(WORLD_WIDTH * 0.5);
+                }
+                
             }
         }.start();
         
