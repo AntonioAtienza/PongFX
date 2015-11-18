@@ -17,6 +17,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -34,11 +35,11 @@ public class PongFX extends Application {
     final int RADIO_BALL = 5;
     //Direccion de la bola
     int dirXBall = 3; 
-    int dirYBall = 2;
+    int dirYBall = 0;
     int posXPlayer2 = WORLD_WIDTH - 15;
     int posXPlayer1 = 15;
-    int marcadorPlayer1 = 1;
-    int marcadorPlayer2 = 1;
+    int marcadorPlayer1 = 0;
+    int marcadorPlayer2 = 0;
     
     
     @Override
@@ -80,13 +81,18 @@ public class PongFX extends Application {
         ball.setTranslateY(WORLD_HEIGHT*0.5);
         root.getChildren().add(ball);
         
+        
+        //int zona = (int)(posYBall-posYPlayer2)/10;
+         
+         
+        
         new AnimationTimer() {
             @Override
             public void handle(long now) {
                 
                 //Movimiento de la bola en el eje X
                 double posXBall = ball.getTranslateX();
-                ball.setTranslateX(posXBall + dirXBall);
+                ball.setTranslateX(posXBall+ dirXBall);
                 //System.out.println(posXBall);
                 /*if(posXBall == WORLD_WIDTH - RADIO_BALL ){
                     dirXBall = -3;}*/
@@ -97,11 +103,11 @@ public class PongFX extends Application {
                 
                 //Movimiento de la bola en el eje de coordenadas Y
                 double posYBall = ball.getTranslateY();
-                ball.setTranslateY (posYBall);//+ dirYBall);
-                if(posYBall == WORLD_HEIGHT - RADIO_BALL){
+                ball.setTranslateY (posYBall + dirYBall);
+                if(posYBall >= WORLD_HEIGHT - RADIO_BALL){
                     dirYBall = -2;
                 }
-                if(posYBall == RADIO_BALL){
+                if(posYBall <= RADIO_BALL){
                     dirYBall = +2;
                 }
                 
@@ -127,46 +133,136 @@ public class PongFX extends Application {
                 if(posYPlayer2 >= WORLD_HEIGHT - BAR_HEIGHT){
                     barPlayer2.setTranslateY(WORLD_HEIGHT - BAR_HEIGHT);
                 }      
+                
+                int zona;
                 //Rebote en la pala JUGADOR 2
                 if(posXBall >= posXPlayer2){
-                    if (posYBall >= posYPlayer2 && posYBall <= (posYPlayer2 + 10)){
+                    if (posYBall >= posYPlayer2 && posYBall <= (posYPlayer2 + BAR_HEIGHT)){
                             dirXBall = -3;
-                            dirYBall = 2;
-                    }   
-                    if (posYBall >= (posYPlayer2 + 10) && posYBall < (posYPlayer2 + 20)){
-                            dirXBall = -3;
-                            dirYBall = 1;
-                    }   
-                      if (posYBall >= (posYPlayer2 + 20) && posYBall < (posYPlayer2 + 30)){
-                            dirXBall = -3;
-                    }   
-                    if (posYBall >= (posYPlayer2 + 30) && posYBall < (posYPlayer2 + 40)){
-                            dirXBall = -3;
-                            dirYBall = -1;
-                    }   
-                    if (posYBall >= (posYPlayer2 + 40) && posYBall <= (posYPlayer2 + BAR_HEIGHT)){
-                            dirXBall = -3;
+                            //dirYBall = 2;
+                            zona = (int)(posYBall-posYPlayer2)/10;
+                            switch (zona){
+                        case 0:
+                            dirXBall =-3;
                             dirYBall = -2;
-                    }                  
+                            ball.setTranslateY (posYBall+ dirYBall);
+                        break;
+                        case 1:
+                            dirXBall =-3;
+                            dirYBall = -1;
+                            ball.setTranslateY (posYBall+ dirYBall);
+                        break;
+                        case 2:
+                            dirXBall =-3;
+                            dirYBall=0;
+                            ball.setTranslateY (posYBall+ dirYBall);
+                        break;
+                        case 3:
+                            dirXBall =-3;
+                            dirYBall = 1;
+                            ball.setTranslateY (posYBall+ dirYBall);
+                        break;
+                        case 4:
+                            dirXBall =-3;
+                            dirYBall = 2;
+                            ball.setTranslateY (posYBall+ dirYBall);
+                        break;
+                         }
+                    }   
+
+                                      
                 }
                 //Rebote pala jugador 1
-                /*if (posXBall <= posXPlayer1){
+                
+                
+                if (posXBall <= posXPlayer1){
                     if (posYBall >= posYPlayer1 && posYBall <= (posYPlayer1 + BAR_HEIGHT)){
                             dirXBall = 3;
-                    }*/
-                
-                //switch (){
-                  //      case 1:
-                            
-                   // }
+                            zona = (int)(posYBall-posYPlayer1)/10;
+                            switch (zona){
+                        case 0:
+                            dirXBall =3;
+                            dirYBall = -2;
+                            ball.setTranslateY (posYBall+ dirYBall);
+                        break;
+                        case 1:
+                            dirXBall =3;
+                            dirYBall = -1;
+                            ball.setTranslateY (posYBall+ dirYBall);
+                        break;
+                        case 2:
+                            dirXBall =3;
+                            dirYBall=0;
+                            ball.setTranslateY (posYBall+ dirYBall);
+                        break;
+                        case 3:
+                            dirXBall =3;
+                            dirYBall = 1;
+                            ball.setTranslateY (posYBall+ dirYBall);
+                        break;
+                        case 4:
+                            dirXBall =3;
+                            dirYBall = 2;
+                            ball.setTranslateY (posYBall+ dirYBall);
+                        break;
+                         }
+                     // System.out.println(zona);      
+                    }
+                }
+                //int zona = (int)(posYBall-posYPlayer2)/10;
+                //System.out.println(posYBall);
+                //System.out.println(zona);
+//                    switch (zona){
+//                        case 1:
+//                            dirXBall =-3;
+//                            dirYBall = 2;
+//                        break;
+//                        case 2:
+//                            dirXBall =-3;
+//                            dirYBall = 1;
+//                        break;
+//                        case 3:
+//                            dirXBall =-3;
+//                        break;
+//                        case 4:
+//                            dirXBall =-3;
+//                            dirYBall = -1;
+//                        break;
+//                        case 5:
+//                            dirXBall =-3;
+//                            dirYBall = -2;
+//                        break;
+//                         }
                 
                 if (posXBall < -RADIO_BALL){
+                    dirYBall=0;
+                    dirXBall=-3;
+                    ball.setTranslateY(WORLD_HEIGHT *0.5);
                     ball.setTranslateX(WORLD_WIDTH * 0.5);
-                    marcador2.setText(String.valueOf(marcadorPlayer1++));
+                    marcador2.setText(String.valueOf(++marcadorPlayer1));
+                    if(Integer.valueOf(marcador2.getText())==11){
+                        marcadorPlayer1=0;
+                        marcador2.setText(String.valueOf(marcadorPlayer1));
+                        marcadorPlayer2=0;
+                        marcador1.setText(String.valueOf(marcadorPlayer2));
+                        
+                        
+                    }
+                    
                 }
                 if (posXBall > WORLD_WIDTH + RADIO_BALL){
+                    dirYBall=0;
+                    dirXBall=3;
+                    ball.setTranslateY(WORLD_HEIGHT *0.5);
                     ball.setTranslateX(WORLD_WIDTH * 0.5);
-                    marcador1.setText(String.valueOf(marcadorPlayer2++));      
+                    marcador1.setText(String.valueOf(++marcadorPlayer2));
+                    if(Integer.valueOf(marcador1.getText())==11){
+                        marcadorPlayer1=0;
+                        marcador2.setText(String.valueOf(marcadorPlayer1));
+                        marcadorPlayer2=0;
+                        marcador1.setText(String.valueOf(marcadorPlayer2));
+                        
+                    }
                 }
             }
         }.start();
