@@ -17,8 +17,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javax.swing.JOptionPane;
-
 /**
  *
  * @Antonio Rojo Atienza
