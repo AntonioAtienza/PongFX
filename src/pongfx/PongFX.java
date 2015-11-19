@@ -27,7 +27,7 @@ public class PongFX extends Application {
     
     final int WORLD_WIDTH = 400;
     final int WORLD_HEIGHT = 250;
-    
+    //Velocidad de las palas de los jugadores y tamaño de dichas palas
     int gravityPlayer1 = 2;
     int gravityPlayer2 = 2;
     final int BAR_HEIGHT = 50;
@@ -38,9 +38,10 @@ public class PongFX extends Application {
     int dirYBall = 0;
     int posXPlayer2 = WORLD_WIDTH - 15;
     int posXPlayer1 = 15;
-    int marcadorPlayer1 = 0;
-    int marcadorPlayer2 = 0;
-    
+    int scoreboardPlayer1 = 0;
+    int scoreboardPlayer2 = 0;
+    final int WIDTH = 10;
+    final double LINE_WIDTH = 0.5;
     
     @Override
     public void start(Stage primaryStage) {
@@ -56,51 +57,37 @@ public class PongFX extends Application {
         root.getChildren().add(barPlayer1);
         
         Rectangle barPlayer2 = new Rectangle(BAR_WIDTH, BAR_HEIGHT, Color.AQUA);
-        barPlayer2.setTranslateX(WORLD_WIDTH - 10);
+        barPlayer2.setTranslateX(WORLD_WIDTH - WIDTH);
         barPlayer2.setTranslateY(WORLD_HEIGHT*0.5 - BAR_HEIGHT*0.5);
         root.getChildren().add(barPlayer2);
         
-        Rectangle line = new Rectangle(0.5,WORLD_HEIGHT, Color.WHITE);
+        Rectangle line = new Rectangle(LINE_WIDTH,WORLD_HEIGHT, Color.WHITE);
         line.setTranslateX(WORLD_WIDTH*0.5);
         root.getChildren().add(line);
         
-        Label marcador1 = new Label(String.valueOf(0));
-        marcador1.setTranslateX(WORLD_WIDTH*0.35);
-        marcador1.setTextFill(Color.GOLD);
-        marcador1.setFont(Font.font(20));
-        root.getChildren().add(marcador1);
+        Label scoreboard1 = new Label(String.valueOf(0));
+        scoreboard1.setTranslateX(WORLD_WIDTH*0.35);
+        scoreboard1.setTextFill(Color.GOLD);
+        scoreboard1.setFont(Font.font(20));
+        root.getChildren().add(scoreboard1);
         
-        Label marcador2 = new Label(String.valueOf(0));
-        marcador2.setTranslateX(WORLD_WIDTH*0.65 - 10);
-        marcador2.setTextFill(Color.GOLD);
-        marcador2.setFont(Font.font(20));
-        root.getChildren().add(marcador2);
+        Label scoreboard2 = new Label(String.valueOf(0));
+        scoreboard2.setTranslateX(WORLD_WIDTH*0.65 - 10);
+        scoreboard2.setTextFill(Color.GOLD);
+        scoreboard2.setFont(Font.font(20));
+        root.getChildren().add(scoreboard2);
         
         Circle ball = new Circle(RADIO_BALL,Color.ORANGE);
         ball.setTranslateX (WORLD_WIDTH*0.5);
         ball.setTranslateY(WORLD_HEIGHT*0.5);
         root.getChildren().add(ball);
         
-        
-        //int zona = (int)(posYBall-posYPlayer2)/10;
-         
-         
-        
         new AnimationTimer() {
             @Override
-            public void handle(long now) {
-                
-                //Movimiento de la bola en el eje X
+            public void handle(long now) { 
+                //Movimiento de la bola en el eje de coordenadas X
                 double posXBall = ball.getTranslateX();
                 ball.setTranslateX(posXBall+ dirXBall);
-                //System.out.println(posXBall);
-                /*if(posXBall == WORLD_WIDTH - RADIO_BALL ){
-                    dirXBall = -3;}*/
-                
-                /*if(posXBall == RADIO_BALL){
-                    dirXBall = +3;
-                }*/
-                
                 //Movimiento de la bola en el eje de coordenadas Y
                 double posYBall = ball.getTranslateY();
                 ball.setTranslateY (posYBall + dirYBall);
@@ -109,159 +96,118 @@ public class PongFX extends Application {
                 }
                 if(posYBall <= RADIO_BALL){
                     dirYBall = +2;
-                }
-                
-                //Movimiento de la pala del jugador 1
+                } 
+                /*Movimiento de la pala del jugador 1 limitado entre dos valores
+                que sería entre el ancho de la escena*/
                 double posYPlayer1 = barPlayer1.getTranslateY();
                 posYPlayer1 += gravityPlayer1;
                 barPlayer1.setTranslateY(posYPlayer1);
-                //System.out.println(posYPlayer1);
+
                 if(posYPlayer1 <= 0){
                     barPlayer1.setTranslateY(0);
                 }
                 if(posYPlayer1 >= WORLD_HEIGHT - BAR_HEIGHT){
                     barPlayer1.setTranslateY(WORLD_HEIGHT - BAR_HEIGHT);
                 }
-                 //Movimiento de la pala del jugador 2
+                /*Movimiento de la pala del jugador 2 limitado entre dos valores
+                que sería entre el ancho de la escena*/
                 double posYPlayer2 = barPlayer2.getTranslateY();
                 posYPlayer2 += gravityPlayer2;
                 barPlayer2.setTranslateY(posYPlayer2);
-                //System.out.println(posYPlayer2);
                 if(posYPlayer2 <= 0){
                     barPlayer2.setTranslateY(0);
                 }
                 if(posYPlayer2 >= WORLD_HEIGHT - BAR_HEIGHT){
                     barPlayer2.setTranslateY(WORLD_HEIGHT - BAR_HEIGHT);
-                }      
-                
+                }     
+                /*Rebote en la pala del jugador 1, dependiendo de las distitntas zonas 
+                donde la pelota rebote saldrá con una velocidad y dirección distinta*/
                 int zona;
-                //Rebote en la pala JUGADOR 2
-                if(posXBall >= posXPlayer2){
-                    if (posYBall >= posYPlayer2 && posYBall <= (posYPlayer2 + BAR_HEIGHT)){
-                            dirXBall = -3;
-                            //dirYBall = 2;
-                            zona = (int)(posYBall-posYPlayer2)/10;
-                            switch (zona){
-                        case 0:
-                            dirXBall =-3;
-                            dirYBall = -2;
-                            ball.setTranslateY (posYBall+ dirYBall);
-                        break;
-                        case 1:
-                            dirXBall =-3;
-                            dirYBall = -1;
-                            ball.setTranslateY (posYBall+ dirYBall);
-                        break;
-                        case 2:
-                            dirXBall =-3;
-                            dirYBall=0;
-                            ball.setTranslateY (posYBall+ dirYBall);
-                        break;
-                        case 3:
-                            dirXBall =-3;
-                            dirYBall = 1;
-                            ball.setTranslateY (posYBall+ dirYBall);
-                        break;
-                        case 4:
-                            dirXBall =-3;
-                            dirYBall = 2;
-                            ball.setTranslateY (posYBall+ dirYBall);
-                        break;
-                         }
-                    }   
-
-                                      
-                }
-                //Rebote pala jugador 1
-                
-                
                 if (posXBall <= posXPlayer1){
                     if (posYBall >= posYPlayer1 && posYBall <= (posYPlayer1 + BAR_HEIGHT)){
                             dirXBall = 3;
-                            zona = (int)(posYBall-posYPlayer1)/10;
-                            switch (zona){
-                        case 0:
-                            dirXBall =3;
-                            dirYBall = -2;
-                            ball.setTranslateY (posYBall+ dirYBall);
-                        break;
-                        case 1:
-                            dirXBall =3;
-                            dirYBall = -1;
-                            ball.setTranslateY (posYBall+ dirYBall);
-                        break;
-                        case 2:
-                            dirXBall =3;
-                            dirYBall=0;
-                            ball.setTranslateY (posYBall+ dirYBall);
-                        break;
-                        case 3:
-                            dirXBall =3;
-                            dirYBall = 1;
-                            ball.setTranslateY (posYBall+ dirYBall);
-                        break;
-                        case 4:
-                            dirXBall =3;
-                            dirYBall = 2;
-                            ball.setTranslateY (posYBall+ dirYBall);
-                        break;
-                         }
-                     // System.out.println(zona);      
+                        zona = (int)(posYBall-posYPlayer1)/10;
+                        switch (zona){
+                            case 0:
+                                dirXBall =3;
+                                dirYBall = -2;
+                            break;
+                            case 1:
+                                dirXBall =3;
+                                dirYBall = -1;
+                            break;
+                            case 2:
+                                dirXBall =3;
+                                dirYBall=0;
+                            break;
+                            case 3:
+                                dirXBall =3;
+                                dirYBall = 1;
+                            break;
+                            case 4:
+                                dirXBall =3;
+                                dirYBall = 2;
+                            break;
+                        }     
                     }
                 }
-                //int zona = (int)(posYBall-posYPlayer2)/10;
-                //System.out.println(posYBall);
-                //System.out.println(zona);
-//                    switch (zona){
-//                        case 1:
-//                            dirXBall =-3;
-//                            dirYBall = 2;
-//                        break;
-//                        case 2:
-//                            dirXBall =-3;
-//                            dirYBall = 1;
-//                        break;
-//                        case 3:
-//                            dirXBall =-3;
-//                        break;
-//                        case 4:
-//                            dirXBall =-3;
-//                            dirYBall = -1;
-//                        break;
-//                        case 5:
-//                            dirXBall =-3;
-//                            dirYBall = -2;
-//                        break;
-//                         }
-                
+                /*Rebote en la pala del jugador 2, dependiendo de las distitntas zonas 
+                donde la pelota rebote saldrá con una velocidad y dirección distinta*/
+                if(posXBall >= posXPlayer2){
+                    if (posYBall >= posYPlayer2 && posYBall <= (posYPlayer2 + BAR_HEIGHT)){
+                            dirXBall = -3;
+                            zona = (int)(posYBall-posYPlayer2)/10;
+                        switch (zona){
+                            case 0:
+                                dirXBall =-3;
+                                dirYBall = -2;
+                            break;
+                            case 1:
+                                dirXBall =-3;
+                                dirYBall = -1;
+                            break;
+                            case 2:
+                                dirXBall =-3;
+                                dirYBall=0;
+                            break;
+                            case 3:
+                                dirXBall =-3;
+                                dirYBall = 1;
+                            break;
+                            case 4:
+                                dirXBall =-3;
+                                dirYBall = 2;
+                            break;
+                        }
+                    }           
+                }
+                /*Realizamos un movimiento a la bola cuando se realiza un punto 
+                para el jugador, aumentamos el marcador y realizamos un reinicio
+                del marcador cuando este llega a un determinado número de puntos*/
                 if (posXBall < -RADIO_BALL){
                     dirYBall=0;
                     dirXBall=-3;
                     ball.setTranslateY(WORLD_HEIGHT *0.5);
                     ball.setTranslateX(WORLD_WIDTH * 0.5);
-                    marcador2.setText(String.valueOf(++marcadorPlayer1));
-                    if(Integer.valueOf(marcador2.getText())==11){
-                        marcadorPlayer1=0;
-                        marcador2.setText(String.valueOf(marcadorPlayer1));
-                        marcadorPlayer2=0;
-                        marcador1.setText(String.valueOf(marcadorPlayer2));
-                        
-                        
-                    }
-                    
+                    scoreboard2.setText(String.valueOf(++scoreboardPlayer1));
+                    if(Integer.valueOf(scoreboard2.getText())==11){
+                        scoreboardPlayer1=0;
+                        scoreboard2.setText(String.valueOf(scoreboardPlayer1));
+                        scoreboardPlayer2=0;
+                        scoreboard1.setText(String.valueOf(scoreboardPlayer2));
+                    }  
                 }
                 if (posXBall > WORLD_WIDTH + RADIO_BALL){
                     dirYBall=0;
                     dirXBall=3;
                     ball.setTranslateY(WORLD_HEIGHT *0.5);
                     ball.setTranslateX(WORLD_WIDTH * 0.5);
-                    marcador1.setText(String.valueOf(++marcadorPlayer2));
-                    if(Integer.valueOf(marcador1.getText())==11){
-                        marcadorPlayer1=0;
-                        marcador2.setText(String.valueOf(marcadorPlayer1));
-                        marcadorPlayer2=0;
-                        marcador1.setText(String.valueOf(marcadorPlayer2));
-                        
+                    scoreboard1.setText(String.valueOf(++scoreboardPlayer2));
+                    if(Integer.valueOf(scoreboard1.getText())==11){
+                        scoreboardPlayer1=0;
+                        scoreboard2.setText(String.valueOf(scoreboardPlayer1));
+                        scoreboardPlayer2=0;
+                        scoreboard1.setText(String.valueOf(scoreboardPlayer2));  
                     }
                 }
             }
@@ -285,9 +231,7 @@ public class PongFX extends Application {
                 } 
             }  
         });
-        
-    }     
-         
+    }      
     /**
      * @param args the command line arguments
      */
