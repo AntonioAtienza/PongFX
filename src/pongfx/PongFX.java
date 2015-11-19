@@ -44,6 +44,7 @@ public class PongFX extends Application {
     @Override
     public void start(Stage primaryStage) {
         Group root = new Group();
+        //primaryStage.setResizable(false);
         Scene scene = new Scene(root, WORLD_WIDTH, WORLD_HEIGHT, Color.BLACK);
         primaryStage.setTitle("Ultimate Pong FX");
         primaryStage.setScene(scene);
@@ -226,6 +227,7 @@ public class PongFX extends Application {
                     break;
                     case DOWN:
                         gravityPlayer2 = 2;
+                    break;
                 } 
             }  
         });
