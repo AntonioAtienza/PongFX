@@ -38,13 +38,14 @@ public class PongFX extends Application {
     int posXPlayer1 = 15;
     int scoreboardPlayer1 = 0;
     int scoreboardPlayer2 = 0;
+    int gameScoreboard1 = 0;
+    int gameScoreboard2 = 0;
     final int WIDTH = 10;
     final double LINE_WIDTH = 0.5;
     
     @Override
     public void start(Stage primaryStage) {
         Group root = new Group();
-        //primaryStage.setResizable(false);
         Scene scene = new Scene(root, WORLD_WIDTH, WORLD_HEIGHT, Color.BLACK);
         primaryStage.setTitle("Ultimate Pong FX");
         primaryStage.setScene(scene);
@@ -75,6 +76,20 @@ public class PongFX extends Application {
         scoreboard2.setTextFill(Color.GOLD);
         scoreboard2.setFont(Font.font(20));
         root.getChildren().add(scoreboard2);
+        
+        Label scoreboard3 = new Label(String.valueOf(0));
+        scoreboard3.setTranslateX(WORLD_WIDTH*0.45);
+        scoreboard3.setTranslateY(WORLD_HEIGHT*0.90);
+        scoreboard3.setTextFill(Color.GOLD);
+        scoreboard3.setFont(Font.font(10));
+        root.getChildren().add(scoreboard3);
+        
+        Label scoreboard4 = new Label(String.valueOf(0));
+        scoreboard4.setTranslateX(WORLD_WIDTH*0.54);
+        scoreboard4.setTranslateY(WORLD_HEIGHT*0.90);
+        scoreboard4.setTextFill(Color.GOLD);
+        scoreboard4.setFont(Font.font(10));
+        root.getChildren().add(scoreboard4);
         
         Circle ball = new Circle(RADIO_BALL,Color.ORANGE);
         ball.setTranslateX (WORLD_WIDTH*0.5);
@@ -119,8 +134,9 @@ public class PongFX extends Application {
                 if(posYPlayer2 >= WORLD_HEIGHT - BAR_HEIGHT){
                     barPlayer2.setTranslateY(WORLD_HEIGHT - BAR_HEIGHT);
                 }     
-                /*Rebote en la pala del jugador 1, dependiendo de las distitntas zonas 
-                donde la pelota rebote saldrá con una velocidad y dirección distinta*/
+                /*Rebote en la pala del jugador 1, dependiendo de las distitntas 
+                zonas donde la pelota rebote saldrá con una velocidad y dirección 
+                distinta*/
                 int zona;
                 if (posXBall <= posXPlayer1){
                     if (posYBall >= posYPlayer1 && posYBall <= (posYPlayer1 + BAR_HEIGHT)){
@@ -150,8 +166,9 @@ public class PongFX extends Application {
                         }     
                     }
                 }
-                /*Rebote en la pala del jugador 2, dependiendo de las distitntas zonas 
-                donde la pelota rebote saldrá con una velocidad y dirección distinta*/
+                /*Rebote en la pala del jugador 2, dependiendo de las distitntas 
+                zonas donde la pelota rebote saldrá con una velocidad y dirección 
+                distinta*/
                 if(posXBall >= posXPlayer2){
                     if (posYBall >= posYPlayer2 && posYBall <= (posYPlayer2 + BAR_HEIGHT)){
                             dirXBall = -3;
@@ -190,11 +207,19 @@ public class PongFX extends Application {
                     ball.setTranslateX(WORLD_WIDTH * 0.5);
                     scoreboard2.setText(String.valueOf(++scoreboardPlayer1));
                     if(Integer.valueOf(scoreboard2.getText())==11){
-                        scoreboardPlayer1=0;
-                        scoreboard2.setText(String.valueOf(scoreboardPlayer1));
-                        scoreboardPlayer2=0;
-                        scoreboard1.setText(String.valueOf(scoreboardPlayer2));
-                    }  
+                       
+                       scoreboardPlayer1=0;
+                       scoreboard2.setText(String.valueOf(scoreboardPlayer1));
+                       scoreboardPlayer2=0;
+                       scoreboard1.setText(String.valueOf(scoreboardPlayer2));
+                       scoreboard4.setText(String.valueOf(++gameScoreboard1));
+                    }
+                    if(Integer.valueOf(scoreboard4.getText())==3){
+                       gameScoreboard1=0;
+                       scoreboard4.setText(String.valueOf(gameScoreboard1));
+                       gameScoreboard2=0;
+                       scoreboard3.setText(String.valueOf(gameScoreboard2)); 
+                    }
                 }
                 if (posXBall > WORLD_WIDTH + RADIO_BALL){
                     dirYBall=0;
@@ -203,10 +228,17 @@ public class PongFX extends Application {
                     ball.setTranslateX(WORLD_WIDTH * 0.5);
                     scoreboard1.setText(String.valueOf(++scoreboardPlayer2));
                     if(Integer.valueOf(scoreboard1.getText())==11){
-                        scoreboardPlayer1=0;
-                        scoreboard2.setText(String.valueOf(scoreboardPlayer1));
-                        scoreboardPlayer2=0;
-                        scoreboard1.setText(String.valueOf(scoreboardPlayer2));  
+                       scoreboardPlayer1=0;
+                       scoreboard2.setText(String.valueOf(scoreboardPlayer1));
+                       scoreboardPlayer2=0;
+                       scoreboard1.setText(String.valueOf(scoreboardPlayer2));
+                       scoreboard3.setText(String.valueOf(++gameScoreboard2));
+                    }
+                    if(Integer.valueOf(scoreboard3.getText())==3){
+                       gameScoreboard1=0;
+                       scoreboard4.setText(String.valueOf(gameScoreboard1));
+                       gameScoreboard2=0;
+                       scoreboard3.setText(String.valueOf(gameScoreboard2)); 
                     }
                 }
             }
@@ -228,10 +260,105 @@ public class PongFX extends Application {
                     case DOWN:
                         gravityPlayer2 = 2;
                     break;
-                } 
-            }  
-        });
-    }      
+                    case SPACE:
+                        /*Realizamos esto para aumentar la velocidad de la bola 
+                        y de las palas*/
+                        new AnimationTimer() {
+                            @Override
+                            public void handle(long now) { 
+                                //int gravityPlayer1 = 4;
+                                //int gravityPlayer2 = 4;
+                                //Movimiento de la bola en el eje de coordenadas X
+                                double posXBall = ball.getTranslateX();
+                                ball.setTranslateX(posXBall+ dirXBall);
+                                //Movimiento de la bola en el eje de coordenadas Y
+                                double posYBall = ball.getTranslateY();
+                                ball.setTranslateY (posYBall + dirYBall);
+                                if(posYBall >= WORLD_HEIGHT - RADIO_BALL){
+                                    dirYBall = -3;
+                                }
+                                if(posYBall <= RADIO_BALL){
+                                    dirYBall = +3;
+                                } 
+                                
+                                double posYPlayer1 = barPlayer1.getTranslateY();
+                                posYPlayer1 += (gravityPlayer1*1.5);
+                                barPlayer1.setTranslateY(posYPlayer1);
+                                double posYPlayer2 = barPlayer2.getTranslateY();
+                                posYPlayer2 += (gravityPlayer2*1.5);
+                                barPlayer2.setTranslateY(posYPlayer2);                  
+                                /*Rebote en la pala del jugador 1, dependiendo de 
+                                las distitntas zonas donde la pelota rebote saldrá 
+                                con una velocidad y dirección distinta*/
+                                int zona;
+                                if (posXBall <= posXPlayer1){
+                                    if (posYBall >= posYPlayer1 && 
+                                        posYBall <= (posYPlayer1 + BAR_HEIGHT)){
+                                            dirXBall = 4;
+                                        zona = (int)(posYBall-posYPlayer1)/10;
+                                        switch (zona){
+                                            case 0:
+                                                dirXBall =4;
+                                                dirYBall = -2;
+                                            break;
+                                            case 1:
+                                                dirXBall =4;
+                                                dirYBall = -1;
+                                            break;
+                                            case 2:
+                                                dirXBall =4;
+                                                dirYBall=0;
+                                            break;
+                                            case 3:
+                                                dirXBall =4;
+                                                dirYBall = 1;
+                                            break;
+                                            case 4:
+                                                dirXBall =4;
+                                                dirYBall = 2;
+                                            break;
+                                        }     
+                                    }
+                                }
+                                /*Rebote en la pala del jugador 2, dependiendo 
+                                de las distitntas zonas donde la pelota rebote 
+                                saldrá con una velocidad y dirección distinta*/
+                                if(posXBall >= posXPlayer2){
+                                    if (posYBall >= posYPlayer2 && 
+                                        posYBall <= (posYPlayer2 + BAR_HEIGHT)){
+                                            dirXBall = -4;
+                                            zona = (int)(posYBall-posYPlayer2)/10;
+                                        switch (zona){
+                                            case 0:
+                                                dirXBall =-4;
+                                                dirYBall = -2;
+                                            break;
+                                            case 1:
+                                                dirXBall =-4;
+                                                dirYBall = -1;
+                                            break;
+                                            case 2:
+                                                dirXBall =-4;
+                                                dirYBall=0;
+                                            break;
+                                            case 3:
+                                                dirXBall =-4;
+                                                dirYBall = 1;
+                                            break;
+                                            case 4:
+                                                dirXBall =-4;
+                                                dirYBall = 2;
+                                            break;
+                                        }
+                                    }           
+                                }
+                            }
+                        }.start();
+                        break;
+                    }  
+                }
+            });
+        }
     /**
      * @param args the command line arguments
      */
