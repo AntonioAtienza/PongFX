@@ -1,4 +1,4 @@
-/*
+﻿/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -23,6 +23,7 @@ import javafx.stage.Stage;
  */
 public class PongFX extends Application {
     
+    //Ancho por alto de la pantalla
     final int WORLD_WIDTH = 400;
     final int WORLD_HEIGHT = 250;
     //Velocidad de las palas de los jugadores y tamaño de dichas palas
